@@ -19,7 +19,7 @@ function App() {
     newBoard[idx] = player;
     setBoard(newBoard);
 
-    if(checkWinner(newBoard)){    // Passing the newBoard instead of the 'board' state because 'board' would have an updated value only after the next re-render. This would prevent the game from showing a delayed win
+    if(checkWinner(newBoard)){    // Passing the newBoard instead of the 'board' state because 'board' would have an updated value only after the next re-render and isn't available at the present instance. This would prevent the game from showing a delayed win
       setWinner(player);
     }else if(newBoard.every(cell => cell !== "")){
       setWinner("Draw")
