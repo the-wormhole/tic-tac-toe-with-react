@@ -6,24 +6,27 @@ function App() {
 
   const [board,setBoard] = useState(["","","","","","","","",""]);
   const [player,setPlayer] = useState('X');
-
+  const [winner,setWinner] = useState(undefined);
 
   const handleClick = (event,idx) =>{
     event.preventDefault()
 
-    if(board[idx] !== ""){
-      alert("Click on an empty box!!");
+    if(board[idx] !== "" || winner){
       return;
     }
     
     let newBoard = structuredClone(board)
-    // [...board];
     newBoard[idx] = player;
-
-    checkWinner(newBoard)
-
     setBoard(newBoard);
-    setPlayer(player === 'X'?'O':'X');
+
+    if(checkWinner(newBoard)){    // Passing the newBoard instead of the 'board' state because 'board' would have an updated value only after the next re-render. This would prevent the game from showing a delayed win
+      setWinner(player);
+    }else if(newBoard.every(cell => cell !== "")){
+      setWinner("Draw")
+    }else{
+      setPlayer(player === 'X'?'O':'X');
+    }
+
   }
 
 
@@ -35,67 +38,38 @@ function App() {
       [0,4,8],[2,4,6] // Diagonals
     ];
 
-    // for(const [a,b,c] of wins){
-    //   if(board[a] !== "" && board)
-    // }
-    if(newBoard[0] === newBoard[1] && newBoard[1] === newBoard[2] && newBoard[0] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[3] === newBoard[4] && newBoard[4] === newBoard[5] && newBoard[3] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[6] === newBoard[7] && newBoard[7] === newBoard[8] && newBoard[6] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[0] === newBoard[3] && newBoard[3] === newBoard[6] && newBoard[0] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[1] === newBoard[4] && newBoard[4] === newBoard[7] && newBoard[1] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[2] === newBoard[5] && newBoard[5] === newBoard[8] && newBoard[2] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[0] === newBoard[4] && newBoard[4] === newBoard[8] && newBoard[0] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
-    }else if(newBoard[2] === newBoard[4] && newBoard[4] === newBoard[6] && newBoard[2] !== ""){
-      alert(`Player ${player} wins`);
-      setBoard(["","","","","","","","",""]);
-      setPlayer('X');
-      return;
+    for(const [a,b,c] of wins){
+      if(board[a] !== "" && board[a] === board[b] && board[a] === board[c]){
+        console.log(`test - ${board}`);
+        return true
+        // setWinner(player);
+        // setBoard(Array(9).fill(""));
+        // setPlayer("X");
+      }
     }
+
+    return false;
   }
 
   const handleReset = (event) => {
     event.preventDefault();
 
-    setBoard(["","","","","","","","",""]);
+    setWinner(undefined);
+    setBoard(Array(9).fill(""));
     setPlayer('X');
   }
   return (
     <>
-      <div id='header'>
-        <Button textValue="Reset" onClick={(event) => handleReset(event)}/>
-      </div>
       <div id='game-container'>
         {board.map((cell,idx) => {
-          return <Button customClass='box-style' textValue={cell} onClick={(event) => handleClick(event,idx)}/>
+          return <Button customClass='box-style' textValue={cell} onClick={(event) => handleClick(event,idx)} key={idx}/>
         })}
+      </div>
+      <div>
+        {winner && <p>{winner === "Draw"?"Match resulted in a draw":`Winner of the game is ${winner}`}</p>}
+      </div>
+      <div id='header'>
+        <Button textValue="Reset" onClick={(event) => handleReset(event)}/>
       </div>
     </>
   )
