@@ -20,7 +20,7 @@ function App() {
 
       <div id='game-container'>
         {board.map((cell,idx) => {
-          return <Button customClass='box-style' textValue={cell} onClick={(event) => handleClick(board,winner,player,setBoard,setPlayer,setWinner,event,idx)} key={idx}/>
+          return <Button role="game-btn"customClass='box-style' textValue={cell} onClick={(event) => handleClick(board,winner,player,setBoard,setPlayer,setWinner,event,idx)} key={idx}/>
         })}
       </div>
 
