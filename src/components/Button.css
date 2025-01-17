@@ -1,9 +1,12 @@
 .box-style{
-
     border-radius: 0;
     width: 100px;
     height: 100px;
     font-size:90px;
     padding: 0;
     text-align: center;
+}
+
+.box-style:hover{
+    background-color: lightgreen;
 }

@@ -17,16 +17,19 @@ function App() {
           {`Player ${player} turn...`}
         </p>
       </div>
+
       <div id='game-container'>
         {board.map((cell,idx) => {
           return <Button customClass='box-style' textValue={cell} onClick={(event) => handleClick(board,winner,player,setBoard,setPlayer,setWinner,event,idx)} key={idx}/>
         })}
       </div>
+
       <div>
-        {winner && <p>{winner === "Draw"?"Match resulted in a draw":`Winner of the game is ${winner}`}</p>}
+        {winner && <p id='winner'>{winner === "Draw"?"Match resulted in a draw":`Winner of the game is ${winner}`}</p>}
       </div>
-      <div id='header'>
-        <Button textValue="Reset" onClick={(event) => handleReset(setWinner,setBoard,setPlayer,event)}/>
+
+      <div id='footer'>
+        <Button customClass='reset-btn' textValue="Reset" onClick={(event) => handleReset(setWinner,setBoard,setPlayer,event)}/>
       </div>
     </>
   )
